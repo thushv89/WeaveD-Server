@@ -2,43 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.weaved.config.models;
+package com.weaved.config.models.elememts;
 
 /**
  *
- * @author Thushan Ganegedara PercpModelElement is used to represent a single
- * element in the perception model related configuration file. This file holds
- * the perception hierarchy we're going to use in the system. Therefore, this
- * hierarchy will be represented by an arrayList of PercpModelElements
+ * @author Lasindu
  */
-public class PercpModelElement {
+public class IKASLConfigModelElement {
 
     private String stackId;
-    private PercpModelElement parentElement;
     private double spreadFactor;
     private int maxIterations;
     private double maxNeighborhoodRadius;
     private double startLearningRate;
     private int hitThreshold;
-    private boolean isSelected;
-
-    public PercpModelElement(String stackId) {
-        this.stackId = stackId;
-    }
-
-    /**
-     * @return the parentElement
-     */
-    public PercpModelElement getParentElement() {
-        return parentElement;
-    }
-
-    /**
-     * @param parentElement the parentElement to set
-     */
-    public void setParentElement(PercpModelElement parentElement) {
-        this.parentElement = parentElement;
-    }
 
     /**
      * @return the spreadFactor
@@ -118,16 +95,9 @@ public class PercpModelElement {
     }
 
     /**
-     * @return the isSelected
+     * @param stackId the stackId to set
      */
-    public boolean isIsSelected() {
-        return isSelected;
-    }
-
-    /**
-     * @param isSelected the isSelected to set
-     */
-    public void setIsSelected(boolean isSelected) {
-        this.isSelected = isSelected;
+    public void setStackId(String stackId) {
+        this.stackId = stackId;
     }
 }

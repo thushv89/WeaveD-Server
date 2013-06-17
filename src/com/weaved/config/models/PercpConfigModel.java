@@ -4,6 +4,7 @@
  */
 package com.weaved.config.models;
 
+import com.weaved.config.models.elememts.PercpConfigModelElement;
 import java.util.ArrayList;
 
 /**
@@ -17,23 +18,23 @@ import java.util.ArrayList;
  */
 public class PercpConfigModel extends ConfigModel {
 
-    private ArrayList<PercpModelElement> percpHeirarchy;
+    private ArrayList<PercpConfigModelElement> percpModelElements;
 
     public PercpConfigModel() {
-        percpHeirarchy = new ArrayList<PercpModelElement>();
+        percpModelElements = new ArrayList<PercpConfigModelElement>();
     }
 
     /**
      * @return the percpHeirarchy
      */
-    public ArrayList<PercpModelElement> getPercpHeirarchy() {
-        return percpHeirarchy;
+    public ArrayList<PercpConfigModelElement> getPercpModelElements() {
+        return percpModelElements;
     }
 
     /**
      * @param percpHeirarchy the percpHeirarchy to set
      */
-    public void setPercpHeirarchy(ArrayList<PercpModelElement> percpHeirarchy) {
-        this.percpHeirarchy = percpHeirarchy;
+    public void setPercpModelElements(ArrayList<PercpConfigModelElement> percpHeirarchy) {
+        this.percpModelElements = percpHeirarchy;
     }
 }
