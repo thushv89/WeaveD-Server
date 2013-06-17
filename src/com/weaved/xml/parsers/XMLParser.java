@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
  * @author Thushan Ganegedara
  */
 public class XMLParser {
-
+    
     private PercpConfigModel percpConfigModel;
     private IKASLConfigModel iKASLConfigModel;
     private ImportantPercpConfigModel imporatantPercpConfigModel;
@@ -42,7 +42,7 @@ public class XMLParser {
      * @return IKASLConfigModel with IKASL Parameters set
      */
     public IKASLConfigModel createIKASLConfiguration(String ikaslDataXml) {
-
+        
         iKASLConfigModel = new IKASLConfigModel();
         ArrayList<IKASLConfigModelElement> iKASLConfigModelElements = new ArrayList<IKASLConfigModelElement>();
         File fXmlFile = new File(ikaslDataXml);
@@ -62,10 +62,10 @@ public class XMLParser {
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLParser.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         doc.getDocumentElement().normalize();
         NodeList nList = doc.getElementsByTagName("ikasl_stack");
-
+        
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -84,7 +84,7 @@ public class XMLParser {
         }
         iKASLConfigModel.setiKASLConfigModelElements(iKASLConfigModelElements);
         return iKASLConfigModel;
-
+        
     }
 
     /**
@@ -94,9 +94,10 @@ public class XMLParser {
      * @return PercpConfigModel PercpConfigModel object with Tree Structure
      */
     public PercpConfigModel createPercpConfigModel(String configModelXml) {
-
+        
         percpConfigModel = new PercpConfigModel();
         ArrayList<PercpConfigModelElement> percpModelElementsList = new ArrayList<PercpConfigModelElement>(); // Create a Root Element
+        
         PercpConfigModelElement rootElement = new PercpConfigModelElement("L-1F-1");
         percpModelElementsList.add(rootElement); // Add Root to ArrayList
         File fXmlFile = new File(configModelXml);
@@ -116,46 +117,46 @@ public class XMLParser {
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLParser.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
+        
+        
         doc.getDocumentElement().normalize();
         NodeList nList = doc.getElementsByTagName("perception");
-
+        
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 PercpConfigModelElement percpModelPerceptionElement = new PercpConfigModelElement(eElement.getAttribute("id"));
                 PercpConfigModelElement parentRoot = rootElement;
+                percpModelPerceptionElement.setStackName(eElement.getAttribute("name"));
                 percpModelPerceptionElement.setParentElement(parentRoot);
                 percpModelElementsList.add(percpModelPerceptionElement);
-                parentRoot.setChildElement(percpModelPerceptionElement);
                 NodeList featureNodes = nNode.getChildNodes();
-
+                
                 for (int i = 0; i < featureNodes.getLength(); i++) {
                     Node featureNode = featureNodes.item(i); // feature nodes
                     if (featureNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element featureElement = (Element) featureNode;
                         PercpConfigModelElement percpModelFeatureElement = new PercpConfigModelElement(featureElement.getAttribute("id"));
+                        percpModelFeatureElement.setStackName(featureElement.getAttribute("name"));
                         percpModelFeatureElement.setParentElement(percpModelPerceptionElement);
                         percpModelElementsList.add(percpModelFeatureElement);
-                        percpModelPerceptionElement.setChildElement(percpModelFeatureElement);
                         NodeList dimensionNodes = featureNode.getChildNodes();
-
+                        
                         for (int j = 0; j < dimensionNodes.getLength(); j++) {
                             Node dimensionNode = dimensionNodes.item(j);
                             if (dimensionNode.getNodeType() == Node.ELEMENT_NODE) {
                                 Element dimElement = (Element) dimensionNode;
                                 PercpConfigModelElement percpModelDimElement = new PercpConfigModelElement(dimElement.getAttribute("id"));
+                                percpModelDimElement.setStackName(dimElement.getAttribute("name"));
                                 percpModelDimElement.setParentElement(percpModelFeatureElement);
                                 percpModelElementsList.add(percpModelDimElement);
-                                percpModelFeatureElement.setChildElement(percpModelDimElement);
                             }
                         }
                     }
                 }
             }
-
+            
         }
         percpConfigModel.setPercpModelElements(percpModelElementsList);
         return percpConfigModel;
@@ -168,11 +169,11 @@ public class XMLParser {
      * @return ImportantPercpConfigModel
      */
     public ImportantPercpConfigModel createImportantConfigModel(String importantConfigXml) {
-
+        
         boolean selected = false;
         imporatantPercpConfigModel = new ImportantPercpConfigModel();
         ArrayList<ImportantPercpConfigModelElement> importantPercpConfigModelElements = new ArrayList<ImportantPercpConfigModelElement>();
-
+        
         File fXmlFile = new File(importantConfigXml);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
@@ -190,14 +191,14 @@ public class XMLParser {
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLParser.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
+        
+        
         doc.getDocumentElement().normalize();
         NodeList nList = doc.getElementsByTagName("ikasl_stack");
-
+        
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
-
+            
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 int isSelected = Integer.parseInt(eElement.getFirstChild().getNodeValue());
@@ -221,7 +222,7 @@ public class XMLParser {
      * @return LinkConfigModel with Cross and Temporal Links set
      */
     public LinkConfigModel createLinkConfigModel(String linkConfigXml) {
-
+        
         LinkConfigModel linkConfigModel = new LinkConfigModel();
         ArrayList<String> crossLinks = new ArrayList<String>();
         ArrayList<String> temporalLinks = new ArrayList<String>();
@@ -242,8 +243,8 @@ public class XMLParser {
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLParser.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
+        
+        
         doc.getDocumentElement().normalize();
         NodeList crossLinkList = doc.getElementsByTagName("crossLink");
         NodeList temporalLinkList = doc.getElementsByTagName("temporalLink");
@@ -277,7 +278,7 @@ public class XMLParser {
      * @return PercpModelElement
      */
     public PercpConfigModelElement getElementById(String ikaslId, ArrayList<PercpConfigModelElement> percpElementList) {
-
+        
         PercpConfigModelElement element = null;
         for (PercpConfigModelElement percpModelElement : percpElementList) {
             if (percpModelElement.getStackId().equals(ikaslId)) {

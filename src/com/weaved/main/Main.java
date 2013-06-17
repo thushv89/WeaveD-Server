@@ -5,13 +5,10 @@
 package com.weaved.main;
 
 import com.weaved.config.models.LinkConfigModel;
-import com.weaved.config.models.PercpConfigModel;
-import com.weaved.config.models.elememts.PercpConfigModelElement;
 import com.weaved.perception.model.main.PercpModelFacade;
 import com.weaved.perception.model.objects.PerceptionHierarchy;
 import com.weaved.perception.model.objects.PerceptionHierarchyNode;
 import com.weaved.xml.parsers.XMLParser;
-import java.util.ArrayList;
 
 /**
  *
@@ -34,18 +31,11 @@ public class Main {
         for (PerceptionHierarchyNode perceptionHierarchyNode : perceptionHierarchy.getPerceptionHierarchyNodes()) {
 
             System.out.println("IKASL ID : " + perceptionHierarchyNode.getStackId());
-            if (perceptionHierarchyNode.getParentElement() == null && perceptionHierarchyNode.getChildElement() == null) {
+            System.out.println("IKASL Name : " + perceptionHierarchyNode.getStackName());
+            if (perceptionHierarchyNode.getParentElement() == null) {
                 System.out.println("Parent : " + "null");
-                System.out.println("Child : " + "null");
-            } else if (perceptionHierarchyNode.getParentElement() == null) {
-                System.out.println("Parent : " + "null");
-                System.out.println("Child : " + perceptionHierarchyNode.getChildElement().getStackId());
-            } else if (perceptionHierarchyNode.getChildElement() == null) {
-                System.out.println("Parent : " + perceptionHierarchyNode.getParentElement().getStackId());
-                System.out.println("Child : " + "null");
             } else {
                 System.out.println("Parent : " + perceptionHierarchyNode.getParentElement().getStackId());
-                System.out.println("Child : " + perceptionHierarchyNode.getChildElement().getStackId());
             }
             System.out.println("SF : " + perceptionHierarchyNode.getSpreadFactor());
             System.out.println("ITR : " + perceptionHierarchyNode.getMaxIterations());

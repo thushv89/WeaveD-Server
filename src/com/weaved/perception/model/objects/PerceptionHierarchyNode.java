@@ -13,8 +13,8 @@ import com.weaved.config.models.elememts.PercpConfigModelElement;
 public class PerceptionHierarchyNode {
 
     private String stackId;
+    private String StackName;
     private PercpConfigModelElement parentElement;
-    private PercpConfigModelElement childElement;
     private double spreadFactor;
     private int maxIterations;
     private double maxNeighborhoodRadius;
@@ -45,20 +45,6 @@ public class PerceptionHierarchyNode {
      */
     public void setParentElement(PercpConfigModelElement parentElement) {
         this.parentElement = parentElement;
-    }
-
-    /**
-     * @return the childElement
-     */
-    public PercpConfigModelElement getChildElement() {
-        return childElement;
-    }
-
-    /**
-     * @param childElement the childElement to set
-     */
-    public void setChildElement(PercpConfigModelElement childElement) {
-        this.childElement = childElement;
     }
 
     /**
@@ -143,5 +129,19 @@ public class PerceptionHierarchyNode {
      */
     public void setIsSelected(boolean isSelected) {
         this.isSelected = isSelected;
+    }
+
+    /**
+     * @return the StackName
+     */
+    public String getStackName() {
+        return StackName;
+    }
+
+    /**
+     * @param StackName the StackName to set
+     */
+    public void setStackName(String StackName) {
+        this.StackName = StackName;
     }
 }

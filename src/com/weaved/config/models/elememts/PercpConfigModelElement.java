@@ -6,7 +6,8 @@ package com.weaved.config.models.elememts;
 
 /**
  *
- * @author Thushan Ganegedara PercpModelElement is used to represent a single
+ * @author Thushan Ganegedara 
+ * PercpModelElement is used to represent a single
  * element in the perception model related configuration file. This file holds
  * the perception hierarchy we're going to use in the system. Therefore, this
  * hierarchy will be represented by an arrayList of PercpModelElements
@@ -14,8 +15,8 @@ package com.weaved.config.models.elememts;
 public class PercpConfigModelElement {
 
     private String stackId;
+    private String stackName;
     private PercpConfigModelElement parentElement;
-    private PercpConfigModelElement childElement;
 
     public PercpConfigModelElement(String stackId) {
         this.stackId = stackId;
@@ -40,16 +41,16 @@ public class PercpConfigModelElement {
     }
 
     /**
-     * @return the childElement
+     * @return the stackName
      */
-    public PercpConfigModelElement getChildElement() {
-        return childElement;
+    public String getStackName() {
+        return stackName;
     }
 
     /**
-     * @param childElement the childElement to set
+     * @param stackName the stackName to set
      */
-    public void setChildElement(PercpConfigModelElement childElement) {
-        this.childElement = childElement;
+    public void setStackName(String stackName) {
+        this.stackName = stackName;
     }
 }

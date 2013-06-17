@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * @author Thushan Ganegedara
  */
 public class PercpModelFacade {
-
+    
     private PerceptionHierarchy perceptionHierarchy;
 
     /**
@@ -34,13 +34,13 @@ public class PercpModelFacade {
         perceptionHierarchy = new PerceptionHierarchy();
         ArrayList<PerceptionHierarchyNode> perceptionHierarchyNodes = new ArrayList<PerceptionHierarchyNode>();
         for (PercpConfigModelElement percpConfigModelElement : percpConfigModel.getPercpModelElements()) {
-
+            
             if (!percpConfigModelElement.getStackId().equals("L-1F-1")) {
                 IKASLConfigModelElement iKASLConfigModelElement = getIKASLConfigModelElementFromModel(iKASLConfigModel, percpConfigModelElement.getStackId());
                 ImportantPercpConfigModelElement importantPercpConfigModelElement = getImportantPercpConfigModelElementFromModel(importantPercpConfigModel, percpConfigModelElement.getStackId());
                 PerceptionHierarchyNode perceptionHierarchyNode = new PerceptionHierarchyNode(percpConfigModelElement.getStackId());
+                perceptionHierarchyNode.setStackName(percpConfigModelElement.getStackName());
                 perceptionHierarchyNode.setParentElement(percpConfigModelElement.getParentElement());
-                perceptionHierarchyNode.setChildElement(percpConfigModelElement.getChildElement());
                 perceptionHierarchyNode.setSpreadFactor(iKASLConfigModelElement.getSpreadFactor());
                 perceptionHierarchyNode.setMaxIterations(iKASLConfigModelElement.getMaxIterations());
                 perceptionHierarchyNode.setMaxNeighborhoodRadius(iKASLConfigModelElement.getMaxNeighborhoodRadius());
@@ -51,7 +51,6 @@ public class PercpModelFacade {
             } else {
                 PerceptionHierarchyNode perceptionHierarchyNode = new PerceptionHierarchyNode(percpConfigModelElement.getStackId());
                 perceptionHierarchyNode.setParentElement(null);
-                perceptionHierarchyNode.setChildElement(percpConfigModelElement.getChildElement());
                 perceptionHierarchyNodes.add(perceptionHierarchyNode);
             }
         }
@@ -67,7 +66,7 @@ public class PercpModelFacade {
      * @return IKASLConfigModelElement
      */
     public IKASLConfigModelElement getIKASLConfigModelElementFromModel(IKASLConfigModel iKASLConfigModel, String ikaslStackID) {
-
+        
         IKASLConfigModelElement iKASLConfigModelElement = null;
         for (IKASLConfigModelElement modelElement : iKASLConfigModel.getiKASLConfigModelElements()) {
             if (ikaslStackID.equals(modelElement.getStackId())) {
@@ -86,7 +85,7 @@ public class PercpModelFacade {
      * @return ImportantPercpConfigModelElement
      */
     public ImportantPercpConfigModelElement getImportantPercpConfigModelElementFromModel(ImportantPercpConfigModel importantPercpConfigModel, String ikaslStackID) {
-
+        
         ImportantPercpConfigModelElement importantPercpConfigModelElement = null;
         for (ImportantPercpConfigModelElement modelElement : importantPercpConfigModel.getImportantPercpConfigModelElements()) {
             if (ikaslStackID.equals(modelElement.getIkaslStackID())) {
