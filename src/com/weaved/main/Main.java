@@ -6,7 +6,6 @@ package com.weaved.main;
 
 import com.weaved.config.models.LinkConfigModel;
 import com.weaved.perception.model.main.PercpModelFacade;
-import com.weaved.perception.model.objects.PerceptionHierarchy;
 import com.weaved.perception.model.objects.PerceptionHierarchyNode;
 import com.weaved.xml.parsers.XMLParser;
 

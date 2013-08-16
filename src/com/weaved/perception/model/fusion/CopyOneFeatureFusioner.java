@@ -12,7 +12,7 @@ package com.weaved.perception.model.fusion;
  * takes one of the low-level perception as a representer of high-level
  * perception.
  */
-public class CopyOneFeatureFusioner {
+public class CopyOneFeatureFusioner extends PercpFusioner{
     
      
 }
