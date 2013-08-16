@@ -5,7 +5,7 @@
 package com.weaved.config.models;
 
 import com.weaved.config.models.elememts.PercpConfigModelElement;
-import java.util.ArrayList;
+import com.weaved.utils.Tree;
 
 /**
  *
@@ -16,25 +16,25 @@ import java.util.ArrayList;
  *
  * This information will be residing in this entity
  */
-public class PercpConfigModel extends ConfigModel {
+public class PercpModelConfigModel extends ConfigModel {
 
-    private ArrayList<PercpConfigModelElement> percpModelElements;
+    private Tree<String> percpModelElements;
 
-    public PercpConfigModel() {
-        percpModelElements = new ArrayList<PercpConfigModelElement>();
+    public PercpModelConfigModel() {
+        percpModelElements = new Tree<String>();
     }
 
     /**
      * @return the percpHeirarchy
      */
-    public ArrayList<PercpConfigModelElement> getPercpModelElements() {
+    public Tree<String> getPercpModelTree() {
         return percpModelElements;
     }
 
     /**
      * @param percpHeirarchy the percpHeirarchy to set
      */
-    public void setPercpModelElements(ArrayList<PercpConfigModelElement> percpHeirarchy) {
+    public void setPercpModelTree(Tree<String> percpHeirarchy) {
         this.percpModelElements = percpHeirarchy;
     }
 }

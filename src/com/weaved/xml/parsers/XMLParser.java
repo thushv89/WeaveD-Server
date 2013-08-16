@@ -7,7 +7,7 @@ package com.weaved.xml.parsers;
 import com.weaved.config.models.IKASLConfigModel;
 import com.weaved.config.models.ImportantPercpConfigModel;
 import com.weaved.config.models.LinkConfigModel;
-import com.weaved.config.models.PercpConfigModel;
+import com.weaved.config.models.PercpModelConfigModel;
 import com.weaved.config.models.elememts.IKASLConfigModelElement;
 import com.weaved.config.models.elememts.ImportantPercpConfigModelElement;
 import com.weaved.config.models.elememts.PercpConfigModelElement;
@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
  */
 public class XMLParser {
     
-    private PercpConfigModel percpConfigModel;
+    private PercpModelConfigModel percpConfigModel;
     private IKASLConfigModel iKASLConfigModel;
     private ImportantPercpConfigModel imporatantPercpConfigModel;
 
@@ -93,9 +93,9 @@ public class XMLParser {
      * @param configModelXml Perception Configuration Model XML file Path
      * @return PercpConfigModel PercpConfigModel object with Tree Structure
      */
-    public PercpConfigModel createPercpConfigModel(String configModelXml) {
+    public PercpModelConfigModel createPercpConfigModel(String configModelXml) {
         
-        percpConfigModel = new PercpConfigModel();
+        percpConfigModel = new PercpModelConfigModel();
         ArrayList<PercpConfigModelElement> percpModelElementsList = new ArrayList<PercpConfigModelElement>(); // Create a Root Element
         
         PercpConfigModelElement rootElement = new PercpConfigModelElement("L-1F-1");

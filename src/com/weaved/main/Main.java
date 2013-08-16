@@ -26,7 +26,7 @@ public class Main {
 
         PercpModelFacade percpModelFacade = new PercpModelFacade();
         LinkConfigModel linkConfigModel = xMLParser.createLinkConfigModel("link_config_model.xml");
-        PerceptionHierarchy perceptionHierarchy = percpModelFacade.createPerceptionHierarchy(xMLParser.createPercpConfigModel("perception_config_model.xml"), xMLParser.createIKASLConfiguration("ikasl_params.xml"), xMLParser.createImportantConfigModel("important_percep_config.xml"));
+        /*PerceptionHierarchy perceptionHierarchy = percpModelFacade.createPerceptionHierarchy(xMLParser.createPercpConfigModel("perception_config_model.xml"), xMLParser.createIKASLConfiguration("ikasl_params.xml"), xMLParser.createImportantConfigModel("important_percep_config.xml"));
 
         for (PerceptionHierarchyNode perceptionHierarchyNode : perceptionHierarchy.getPerceptionHierarchyNodes()) {
 
@@ -44,7 +44,7 @@ public class Main {
             System.out.println("HT : " + perceptionHierarchyNode.getHitThreshold());
             System.out.println("Selected : " + perceptionHierarchyNode.getIsSelected());
             System.out.println("******************************");
-        }
+        }*/
 
     }
 }
