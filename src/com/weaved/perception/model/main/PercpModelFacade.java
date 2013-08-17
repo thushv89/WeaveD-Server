@@ -4,6 +4,8 @@
  */
 package com.weaved.perception.model.main;
 
+import com.ikasl.core.IKASLMain;
+import com.ikasl.objects.IKASLParams;
 import com.weaved.config.loaders.IKASLConfigLoader;
 import com.weaved.config.loaders.ImportantPercpConfigLoader;
 import com.weaved.config.loaders.LinkGeneratorConfigLoader;
@@ -18,6 +20,7 @@ import com.weaved.config.models.elememts.PercpConfigModelElement;
 import com.weaved.perception.model.objects.PerceptionHierarchyNode;
 import com.weaved.utils.Tree;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,7 +30,28 @@ public class PercpModelFacade {
     
     private Tree<String> perceptionIDHierarchy;
     private ArrayList<IKASLConfigModelElement> ikaslParamList;
-
+    private ArrayList<String> cfLinks;
+    
+    private ArrayList<IKASLMain> ikaslMainList;
+    
+    public PercpModelFacade(){
+        ikaslMainList = new ArrayList<IKASLMain>();
+    }
+    
+    private IKASLParams getIKASLParamsFromModelElement(IKASLConfigModelElement element){
+        IKASLParams params = new IKASLParams();
+        params.setSpreadFactor(element.getSpreadFactor());
+        params.setMaxNeighborhoodRadius(element.getMaxNeighborhoodRadius());
+        params.setStartLearningRate(element.getStartLearningRate());
+        params.setMaxIterations(element.getMaxIterations());
+        params.setHitThreshold(element.getHitThreshold());
+        
+        //TODO: NEED TO SET DIMENSION
+        //params.setDimensions("xxxxxxxxxx");
+        
+        return params;
+    }
+    
     /**
      * Sets the Full PerceptionHierarchy With Following 3 XML Files
      *
@@ -36,9 +60,11 @@ public class PercpModelFacade {
      * @param importantPercpConfigModel
      * @return PerceptionHierarchy
      */
-    private void createPerceptionHierarchy(PercpModelConfigModel percpConfigModel, IKASLConfigModel iKASLConfigModel, ImportantPercpConfigModel importantPercpConfigModel) {
+    private void createPerceptionHierarchy(PercpModelConfigModel percpConfigModel, ImportantPercpConfigModel importantPercpConfigModel,
+            IKASLConfigModel iKASLConfigModel, LinkConfigModel linkModel) {
         perceptionIDHierarchy =  percpConfigModel.getPercpModelTree();                
         ikaslParamList = iKASLConfigModel.getiKASLConfigModelElements();
+        cfLinks = linkModel.getCrossLinks();
     }
 
     /**
@@ -102,12 +128,19 @@ public class PercpModelFacade {
         linkConfModel = (LinkConfigModel) lgConfLoader.getPopulatedConfigModel();
         ipConfModel =  (ImportantPercpConfigModel) ipConfLoader.getPopulatedConfigModel();
         
-        createPerceptionHierarchy(pmConfModel, ikaslModel, ipConfModel);
+        createPerceptionHierarchy(pmConfModel, ipConfModel, ikaslModel, linkConfModel);
     
     }
     
-    public void runIKASL(){
-    
+    public void runIKASL(Tree<String> percpTree, ArrayList<IKASLConfigModelElement> ikaslParamList){
+        if(percpTree.getSize()== ikaslParamList.size()){
+        for(int i=0;i<percpTree.getSize();i++){
+            IKASLMain ikasl = new IKASLMain(null, null); 
+        }
+        }
+        else{
+            System.out.println("Error dimension mismatch between, # of items in perception tree and ikasl param list");
+        }
     }
     
     public void fusePerceptions(){
