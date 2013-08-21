@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.weaved.config.loaders;
+package com.weaved.xml.parsers;
 
 import com.weaved.config.models.ConfigModel;
-import com.weaved.config.models.IKASLConfigModel;
-import com.weaved.config.models.elememts.IKASLConfigModelElement;
+import com.weaved.config.models.ImportantPercpConfigModel;
+import com.weaved.config.models.elememts.ImportantPercpConfigModelElement;
 import com.weaved.xml.parsers.XMLParser;
 import java.io.File;
 import java.io.IOException;
@@ -26,14 +26,16 @@ import org.xml.sax.SAXException;
  *
  * @author Thushan Ganegedara
  */
-public class IKASLConfigLoader extends ConfigLoader {
+public class ImportantPercpConfigLoader extends XMLParser {
 
-    private IKASLConfigModel iKASLConfigModel;
+    private ImportantPercpConfigModel imporatantPercpConfigModel;
 
     @Override
-    public void loadConfig(String path) {
-        iKASLConfigModel = new IKASLConfigModel();
-        ArrayList<IKASLConfigModelElement> iKASLConfigModelElements = new ArrayList<IKASLConfigModelElement>();
+    public void createConfig(String path) {
+        boolean selected = false;
+        imporatantPercpConfigModel = new ImportantPercpConfigModel();
+        ArrayList<ImportantPercpConfigModelElement> importantPercpConfigModelElements = new ArrayList<ImportantPercpConfigModelElement>();
+
         File fXmlFile = new File(path);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
@@ -57,25 +59,24 @@ public class IKASLConfigLoader extends ConfigLoader {
 
         for (int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
+
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
-                IKASLConfigModelElement iKASLConfigModelElement = new IKASLConfigModelElement();
-                // Create a PercpModelElement with IKASL Attributes
-                iKASLConfigModelElement.setStackId(eElement.getAttribute("id"));
-                iKASLConfigModelElement.setSpreadFactor(Double.parseDouble(eElement.getElementsByTagName("SF").item(0).getTextContent()));
-                iKASLConfigModelElement.setMaxIterations(Integer.parseInt(eElement.getElementsByTagName("ITR").item(0).getTextContent()));
-                iKASLConfigModelElement.setMaxNeighborhoodRadius(Double.parseDouble(eElement.getElementsByTagName("NR").item(0).getTextContent()));
-                iKASLConfigModelElement.setStartLearningRate(Double.parseDouble(eElement.getElementsByTagName("LR").item(0).getTextContent()));
-                iKASLConfigModelElement.setHitThreshold(Integer.parseInt(eElement.getElementsByTagName("HT").item(0).getTextContent()));
-                // Add Elements to ArrayList
-                iKASLConfigModelElements.add(iKASLConfigModelElement);
+                int isSelected = Integer.parseInt(eElement.getFirstChild().getNodeValue());
+                if (isSelected == 1) {
+                    selected = true;
+                } else if (isSelected == 0) {
+                    selected = false;
+                }
+                ImportantPercpConfigModelElement importantPercpConfigModelElement = new ImportantPercpConfigModelElement(eElement.getAttribute("id"), selected);
+                importantPercpConfigModelElements.add(importantPercpConfigModelElement);
             }
         }
-        iKASLConfigModel.setiKASLConfigModelElements(iKASLConfigModelElements);
+        imporatantPercpConfigModel.setImportantPercpConfigModelElements(importantPercpConfigModelElements);
     }
 
     @Override
-    public ConfigModel getPopulatedConfigModel() {
-        return iKASLConfigModel;
+    public ConfigModel getConfig() {
+        return imporatantPercpConfigModel;
     }
 }

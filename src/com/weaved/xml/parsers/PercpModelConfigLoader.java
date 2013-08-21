@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.weaved.config.loaders;
+package com.weaved.xml.parsers;
 
 import com.weaved.config.models.ConfigModel;
 import com.weaved.config.models.PercpModelConfigModel;
@@ -26,12 +26,12 @@ import org.xml.sax.SAXException;
  *
  * @author Thushan Ganegedara
  */
-public class PercpModelConfigLoader extends ConfigLoader {
+public class PercpModelConfigLoader extends XMLParser {
 
     private PercpModelConfigModel percpModelConfigModel;
 
     @Override
-    public void loadConfig(String path) {
+    public void createConfig(String path) {
         percpModelConfigModel = new PercpModelConfigModel();
         File fXmlFile = new File(path);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -91,7 +91,7 @@ public class PercpModelConfigLoader extends ConfigLoader {
     }
 
     @Override
-    public ConfigModel getPopulatedConfigModel() {
+    public ConfigModel getConfig() {
         return percpModelConfigModel;
     }
 }

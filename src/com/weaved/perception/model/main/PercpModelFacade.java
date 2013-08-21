@@ -16,42 +16,38 @@ import com.weaved.config.models.LinkConfigModel;
 import com.weaved.config.models.PercpModelConfigModel;
 import com.weaved.config.models.elememts.IKASLConfigModelElement;
 import com.weaved.config.models.elememts.ImportantPercpConfigModelElement;
-import com.weaved.config.models.elememts.PercpConfigModelElement;
-import com.weaved.perception.model.objects.PerceptionHierarchyNode;
 import com.weaved.utils.Tree;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Thushan Ganegedara
  */
 public class PercpModelFacade {
-    
+
     private Tree<String> perceptionIDHierarchy;
     private ArrayList<IKASLConfigModelElement> ikaslParamList;
     private ArrayList<String> cfLinks;
-    
     private ArrayList<IKASLMain> ikaslMainList;
-    
-    public PercpModelFacade(){
+
+    public PercpModelFacade() {
         ikaslMainList = new ArrayList<IKASLMain>();
     }
-    
-    private IKASLParams getIKASLParamsFromModelElement(IKASLConfigModelElement element){
+
+    private IKASLParams getIKASLParamsFromModelElement(IKASLConfigModelElement element) {
         IKASLParams params = new IKASLParams();
         params.setSpreadFactor(element.getSpreadFactor());
         params.setMaxNeighborhoodRadius(element.getMaxNeighborhoodRadius());
         params.setStartLearningRate(element.getStartLearningRate());
         params.setMaxIterations(element.getMaxIterations());
         params.setHitThreshold(element.getHitThreshold());
-        
+
         //TODO: NEED TO SET DIMENSION
         //params.setDimensions("xxxxxxxxxx");
-        
+
         return params;
     }
-    
+
     /**
      * Sets the Full PerceptionHierarchy With Following 3 XML Files
      *
@@ -62,7 +58,7 @@ public class PercpModelFacade {
      */
     private void createPerceptionHierarchy(PercpModelConfigModel percpConfigModel, ImportantPercpConfigModel importantPercpConfigModel,
             IKASLConfigModel iKASLConfigModel, LinkConfigModel linkModel) {
-        perceptionIDHierarchy =  percpConfigModel.getPercpModelTree();                
+        perceptionIDHierarchy = percpConfigModel.getPercpModelTree();
         ikaslParamList = iKASLConfigModel.getiKASLConfigModelElements();
         cfLinks = linkModel.getCrossLinks();
     }
@@ -75,7 +71,7 @@ public class PercpModelFacade {
      * @return IKASLConfigModelElement
      */
     public IKASLConfigModelElement getIKASLConfigModelElementFromModel(IKASLConfigModel iKASLConfigModel, String ikaslStackID) {
-        
+
         IKASLConfigModelElement iKASLConfigModelElement = null;
         for (IKASLConfigModelElement modelElement : iKASLConfigModel.getiKASLConfigModelElements()) {
             if (ikaslStackID.equals(modelElement.getStackId())) {
@@ -94,7 +90,7 @@ public class PercpModelFacade {
      * @return ImportantPercpConfigModelElement
      */
     public ImportantPercpConfigModelElement getImportantPercpConfigModelElementFromModel(ImportantPercpConfigModel importantPercpConfigModel, String ikaslStackID) {
-        
+
         ImportantPercpConfigModelElement importantPercpConfigModelElement = null;
         for (ImportantPercpConfigModelElement modelElement : importantPercpConfigModel.getImportantPercpConfigModelElements()) {
             if (ikaslStackID.equals(modelElement.getIkaslStackID())) {
@@ -104,52 +100,46 @@ public class PercpModelFacade {
         }
         return importantPercpConfigModelElement;
     }
-    
     PercpModelConfigModel pmConfModel;
     IKASLConfigModel ikaslModel;
     LinkConfigModel linkConfModel;
     ImportantPercpConfigModel ipConfModel;
-    
+
     //ArrayList<String>
-    public void loadAllConfig(){
+    public void loadAllConfig() {
         PercpModelConfigLoader pmConfLoader = new PercpModelConfigLoader();
         IKASLConfigLoader ikaslLoader = new IKASLConfigLoader();
         LinkGeneratorConfigLoader lgConfLoader = new LinkGeneratorConfigLoader();
         ImportantPercpConfigLoader ipConfLoader = new ImportantPercpConfigLoader();
-        
+
         //finds the config file in the folder struction and load configuration to a model
         pmConfLoader.loadConfig("STRING_PATH_TO_PERCP_MODEL_CONFIG");
         ikaslLoader.loadConfig("STRING_PATH_TO_IKASL_CONFIG");
         lgConfLoader.loadConfig("STRING_PATH_TO_LINK_GEN_CONFIG");
         ipConfLoader.loadConfig("STRING_PATH_TO_IMPORTANT_PERCP_CONFIG");
-        
+
         pmConfModel = (PercpModelConfigModel) pmConfLoader.getPopulatedConfigModel();
         ikaslModel = (IKASLConfigModel) ikaslLoader.getPopulatedConfigModel();
         linkConfModel = (LinkConfigModel) lgConfLoader.getPopulatedConfigModel();
-        ipConfModel =  (ImportantPercpConfigModel) ipConfLoader.getPopulatedConfigModel();
-        
+        ipConfModel = (ImportantPercpConfigModel) ipConfLoader.getPopulatedConfigModel();
+
         createPerceptionHierarchy(pmConfModel, ipConfModel, ikaslModel, linkConfModel);
-    
+
     }
-    
-    public void runIKASL(Tree<String> percpTree, ArrayList<IKASLConfigModelElement> ikaslParamList){
-        if(percpTree.getSize()== ikaslParamList.size()){
-        for(int i=0;i<percpTree.getSize();i++){
-            IKASLMain ikasl = new IKASLMain(null, null); 
-        }
-        }
-        else{
+
+    public void runIKASL(Tree<String> percpTree, ArrayList<IKASLConfigModelElement> ikaslParamList) {
+        if (percpTree.getSize() == ikaslParamList.size()) {
+            for (int i = 0; i < percpTree.getSize(); i++) {
+                IKASLMain ikasl = new IKASLMain(null, null);
+            }
+        } else {
             System.out.println("Error dimension mismatch between, # of items in perception tree and ikasl param list");
         }
     }
-    
-    public void fusePerceptions(){
-    
-    }
-    
-    public void runLinkGeneration(){
-    
+
+    public void fusePerceptions() {
     }
 
-    
+    public void runLinkGeneration() {
+    }
 }

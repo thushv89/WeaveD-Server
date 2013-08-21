@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.weaved.config.loaders;
+package com.weaved.xml.parsers;
 
 import com.weaved.config.models.ConfigModel;
 import com.weaved.config.models.LinkConfigModel;
@@ -25,13 +25,12 @@ import org.xml.sax.SAXException;
  *
  * @author Thushan Ganegedara
  */
-public class LinkGeneratorConfigLoader extends ConfigLoader {
+public class LinkGeneratorConfigLoader extends XMLParser {
 
     private LinkConfigModel linkConfigModel;
 
     @Override
-    public void loadConfig(String path) {
-
+    public void createConfig(String path) {
         linkConfigModel = new LinkConfigModel();
         ArrayList<String> crossLinks = new ArrayList<String>();
         ArrayList<String> temporalLinks = new ArrayList<String>();
@@ -75,11 +74,10 @@ public class LinkGeneratorConfigLoader extends ConfigLoader {
         }
         linkConfigModel.setCrossLinks(crossLinks); // Set Cross Links
         linkConfigModel.setTemporalLinks(temporalLinks); // Set Temporal Links
-
     }
 
     @Override
-    public ConfigModel getPopulatedConfigModel() {
+    public ConfigModel getConfig() {
         return linkConfigModel;
     }
 }

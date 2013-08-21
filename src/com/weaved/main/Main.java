@@ -6,7 +6,6 @@ package com.weaved.main;
 
 import com.weaved.config.models.LinkConfigModel;
 import com.weaved.perception.model.main.PercpModelFacade;
-import com.weaved.perception.model.objects.PerceptionHierarchyNode;
 import com.weaved.xml.parsers.XMLParser;
 
 /**
@@ -21,10 +20,10 @@ public class Main {
     public static void main(String[] args) {
 
         // Bypassing for Testing
-        XMLParser xMLParser = new XMLParser();
-
-        PercpModelFacade percpModelFacade = new PercpModelFacade();
-        LinkConfigModel linkConfigModel = xMLParser.createLinkConfigModel("link_config_model.xml");
+//        XMLParser xMLParser = new XMLParser();
+//
+//        PercpModelFacade percpModelFacade = new PercpModelFacade();
+//        LinkConfigModel linkConfigModel = xMLParser.createLinkConfigModel("link_config_model.xml");
         /*PerceptionHierarchy perceptionHierarchy = percpModelFacade.createPerceptionHierarchy(xMLParser.createPercpConfigModel("perception_config_model.xml"), xMLParser.createIKASLConfiguration("ikasl_params.xml"), xMLParser.createImportantConfigModel("important_percep_config.xml"));
 
         for (PerceptionHierarchyNode perceptionHierarchyNode : perceptionHierarchy.getPerceptionHierarchyNodes()) {

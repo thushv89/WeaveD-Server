@@ -2,12 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.weaved.config.loaders;
+package com.weaved.xml.parsers;
 
 import com.weaved.config.models.ConfigModel;
 import com.weaved.config.models.IKASLConfigModel;
 import com.weaved.config.models.elememts.IKASLConfigModelElement;
-import com.weaved.xml.parsers.XMLParser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,14 +23,14 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author Thushan Ganegedara
+ * @author Lasindu
  */
-public class IKASLConfigLoader extends ConfigLoader {
+public class IKASLConfigModelXMLParser extends XMLParser {
 
     private IKASLConfigModel iKASLConfigModel;
 
     @Override
-    public void loadConfig(String path) {
+    public void createConfig(String path) {
         iKASLConfigModel = new IKASLConfigModel();
         ArrayList<IKASLConfigModelElement> iKASLConfigModelElements = new ArrayList<IKASLConfigModelElement>();
         File fXmlFile = new File(path);
@@ -75,7 +74,7 @@ public class IKASLConfigLoader extends ConfigLoader {
     }
 
     @Override
-    public ConfigModel getPopulatedConfigModel() {
+    public ConfigModel getConfig() {
         return iKASLConfigModel;
     }
 }

@@ -6,8 +6,8 @@ package com.weaved.config.models.elememts;
 
 /**
  * ================= OBSOLETE =============================
- * @author Thushan Ganegedara 
- * PercpModelElement is used to represent a single
+ *
+ * @author Thushan Ganegedara PercpModelElement is used to represent a single
  * element in the perception model related configuration file. This file holds
  * the perception hierarchy we're going to use in the system. Therefore, this
  * hierarchy will be represented by an arrayList of PercpModelElements
