@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
  *
  * @author Thushan Ganegedara
  */
-public class PercpModelConfigLoader extends XMLParser {
+public class PercpModelConfigXMLParser extends XMLParser {
 
     private PercpModelConfigModel percpModelConfigModel;
 

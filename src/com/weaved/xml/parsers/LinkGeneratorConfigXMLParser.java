@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
  *
  * @author Thushan Ganegedara
  */
-public class LinkGeneratorConfigLoader extends XMLParser {
+public class LinkGeneratorConfigXMLParser extends XMLParser {
 
     private LinkConfigModel linkConfigModel;
 

@@ -5,22 +5,7 @@
 package com.weaved.config.loaders;
 
 import com.weaved.config.models.ConfigModel;
-import com.weaved.config.models.IKASLConfigModel;
-import com.weaved.config.models.elememts.IKASLConfigModelElement;
-import com.weaved.xml.parsers.XMLParser;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import com.weaved.xml.parsers.IKASLConfigModelXMLParser;
 
 /**
  *
@@ -28,54 +13,15 @@ import org.xml.sax.SAXException;
  */
 public class IKASLConfigLoader extends ConfigLoader {
 
-    private IKASLConfigModel iKASLConfigModel;
+    private IKASLConfigModelXMLParser iKASLConfigModelXMLParser;
 
     @Override
     public void loadConfig(String path) {
-        iKASLConfigModel = new IKASLConfigModel();
-        ArrayList<IKASLConfigModelElement> iKASLConfigModelElements = new ArrayList<IKASLConfigModelElement>();
-        File fXmlFile = new File(path);
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder;
-        Document doc = null;
-        try {
-            dBuilder = dbFactory.newDocumentBuilder();
-            try {
-                doc = dBuilder.parse(fXmlFile);
-                doc.getDocumentElement().normalize();
-            } catch (SAXException ex) {
-                Logger.getLogger(XMLParser.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(XMLParser.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(XMLParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        doc.getDocumentElement().normalize();
-        NodeList nList = doc.getElementsByTagName("ikasl_stack");
-
-        for (int temp = 0; temp < nList.getLength(); temp++) {
-            Node nNode = nList.item(temp);
-            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element eElement = (Element) nNode;
-                IKASLConfigModelElement iKASLConfigModelElement = new IKASLConfigModelElement();
-                // Create a PercpModelElement with IKASL Attributes
-                iKASLConfigModelElement.setStackId(eElement.getAttribute("id"));
-                iKASLConfigModelElement.setSpreadFactor(Double.parseDouble(eElement.getElementsByTagName("SF").item(0).getTextContent()));
-                iKASLConfigModelElement.setMaxIterations(Integer.parseInt(eElement.getElementsByTagName("ITR").item(0).getTextContent()));
-                iKASLConfigModelElement.setMaxNeighborhoodRadius(Double.parseDouble(eElement.getElementsByTagName("NR").item(0).getTextContent()));
-                iKASLConfigModelElement.setStartLearningRate(Double.parseDouble(eElement.getElementsByTagName("LR").item(0).getTextContent()));
-                iKASLConfigModelElement.setHitThreshold(Integer.parseInt(eElement.getElementsByTagName("HT").item(0).getTextContent()));
-                // Add Elements to ArrayList
-                iKASLConfigModelElements.add(iKASLConfigModelElement);
-            }
-        }
-        iKASLConfigModel.setiKASLConfigModelElements(iKASLConfigModelElements);
+       iKASLConfigModelXMLParser.createConfig(path);
     }
 
     @Override
     public ConfigModel getPopulatedConfigModel() {
-        return iKASLConfigModel;
+        return iKASLConfigModelXMLParser.getConfig();
     }
 }
