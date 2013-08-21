@@ -1,3 +1,4 @@
+*.ser
 *.txt
 *.html
 build.xml

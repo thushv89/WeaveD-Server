@@ -8,8 +8,11 @@ import com.ikasl.core.IKASLMain;
 import com.ikasl.objects.CrossFeatureData;
 import com.ikasl.objects.IKASLParams;
 import com.ikasl.objects.TemporalLinkData;
+import com.ikasl.objects.cross.GNodeHitValueObject;
+import com.ikasl.objects.cross.GNodeHitValueObjectList;
 import com.vhlinker.commands.VHLinkerCommand;
 import com.vhlinker.main.VHLinkerFacade;
+import com.vhlinker.util.EntityIDGenerator;
 import com.weaved.config.loaders.IKASLConfigLoader;
 import com.weaved.config.loaders.ImportantPercpConfigLoader;
 import com.weaved.config.loaders.LinkGeneratorConfigLoader;
@@ -20,6 +23,7 @@ import com.weaved.config.models.LinkConfigModel;
 import com.weaved.config.models.PercpModelConfigModel;
 import com.weaved.config.models.elememts.IKASLConfigModelElement;
 import com.weaved.config.models.elememts.ImportantPercpConfigModelElement;
+import com.weaved.query.enums.QueryObjectType;
 import com.weaved.utils.Tree;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,7 +40,8 @@ public class PercpModelFacade {
     private ArrayList<IKASLConfigModelElement> ikaslParamList;
     private ArrayList<String> cfLinks;
     private ArrayList<IKASLMain> ikaslMainList;
-
+    private ArrayList<VHLinkerFacade> vhLinkerList = new ArrayList<VHLinkerFacade>();
+    
     public PercpModelFacade() {
         ikaslMainList = new ArrayList<IKASLMain>();
     }
@@ -144,6 +149,16 @@ public class PercpModelFacade {
         }
     }
 
+    public void runIKASLTest(String id, IKASLParams params, ArrayList<double[]> iWeights, ArrayList<String> iNames){
+        
+        IKASLMain ikasl = new IKASLMain(params, id);
+        ikasl.runIKASLForCycle(ikasl.retrieveLastLayer("lastGLayer.ser"), iWeights, iNames);
+        ikaslMainList.add(ikasl);
+        ikasl.writeLearnCycleXML(id);
+        System.out.println("----------------------- IKASL test results:"+ikasl.getTesterTestResults().size()+" -------------------------------");
+        
+    }
+    
     public void fusePerceptions() {
     }
 
@@ -167,9 +182,54 @@ public class PercpModelFacade {
         VHLinkerFacade vHLinkerFacade = new VHLinkerFacade();
         VHLinkerCommand vHLinkerCommand = vHLinkerFacade.generateVHLinkerCommand("config.properties", temporalLinksIsSet, crossFLinksIsSet);
         vHLinkerFacade.runLinkersWithCommand(vHLinkerCommand);
-
-        CrossFeatureData crossFeatureData = vHLinkerFacade.getCrossLinkObject();
-        TemporalLinkData temporalLinkData = vHLinkerFacade.getTemporalLinkObject();
-
+        vhLinkerList.add(vHLinkerFacade);
     }
+    
+    
+    //Assumption: We consider ikaslMainList[0] runs for Image color existence
+    //ikaslMainList[1] runs for Text 
+    private String findGNodeFromIKASLForQuery(QueryObjectType type,double[] query){
+        
+        IKASLMain ikaslMain;
+        if(type == QueryObjectType.IMAGE){
+            ikaslMain = ikaslMainList.get(0); //color existence
+        }else{
+            ikaslMain = ikaslMainList.get(1); //text
+        }
+        return ikaslMain.getLastLayersWinnerNodeForQuery(query);
+    }
+    
+    public ArrayList<String> getHorizontalLinksForQuery(QueryObjectType type, double[] query){
+        String winnerID = this.findGNodeFromIKASLForQuery(type, query);
+        System.out.println("--------------- Winner ID : "+winnerID+" -----------------------");
+        VHLinkerFacade vhLinkerFacade = vhLinkerList.get(0);
+        
+        CrossFeatureData crossFeatureData = vhLinkerFacade.getCrossLinkObject();
+        TemporalLinkData temporalLinkData = vhLinkerFacade.getTemporalLinkObject();
+        
+        ArrayList<GNodeHitValueObjectList> gnHVList = crossFeatureData.getgNodeHitValueObjectList();
+        ArrayList<ArrayList<String>> dataVals = new ArrayList<ArrayList<String>>();
+        
+        for(GNodeHitValueObject obj : gnHVList.get(gnHVList.size()-1).getgNodeHitValueObjects()){
+            if(EntityIDGenerator.generateEntityIDString(obj.getRow()).equals(winnerID)){
+                dataVals.add(obj.getDataValues());
+            }
+        }
+        
+        ArrayList<String> maxLengthStr = null;
+        ArrayList<String> prevStr = dataVals.get(0);
+        for(ArrayList<String> str : dataVals){
+            if(str.size()>=prevStr.size()){
+                maxLengthStr = str;
+            }
+            prevStr = str;
+        }
+        
+        return maxLengthStr;
+    }
+    
+    /* Not needed yet
+    public ArrayList<ArrayList<String>> getVerticalLinksForQuery(QueryObjectType type, double[] query){
+        
+    }*/
 }
