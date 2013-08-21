@@ -36,10 +36,6 @@ public class PercpModelFacade {
     private ArrayList<IKASLConfigModelElement> ikaslParamList;
     private ArrayList<String> cfLinks;
     private ArrayList<IKASLMain> ikaslMainList;
-    private VHLinkerFacade vHLinkerFacade;
-    private VHLinkerCommand vHLinkerCommand;
-    private CrossFeatureData crossFeatureData;
-    private TemporalLinkData temporalLinkData;
 
     public PercpModelFacade() {
         ikaslMainList = new ArrayList<IKASLMain>();
@@ -167,11 +163,13 @@ public class PercpModelFacade {
             ex.printStackTrace();
         }
 
-        vHLinkerFacade = new VHLinkerFacade();
-        vHLinkerCommand = vHLinkerFacade.generateVHLinkerCommand("config.properties", temporalLinksIsSet, crossFLinksIsSet);
+
+        VHLinkerFacade vHLinkerFacade = new VHLinkerFacade();
+        VHLinkerCommand vHLinkerCommand = vHLinkerFacade.generateVHLinkerCommand("config.properties", temporalLinksIsSet, crossFLinksIsSet);
         vHLinkerFacade.runLinkersWithCommand(vHLinkerCommand);
-        crossFeatureData = vHLinkerFacade.getCrossLinkObject();
-        temporalLinkData = vHLinkerFacade.getTemporalLinkObject();
+
+        CrossFeatureData crossFeatureData = vHLinkerFacade.getCrossLinkObject();
+        TemporalLinkData temporalLinkData = vHLinkerFacade.getTemporalLinkObject();
 
     }
 }

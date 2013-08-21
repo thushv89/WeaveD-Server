@@ -19,6 +19,9 @@ public class Main {
      */
     public static void main(String[] args) {
 
+        PercpModelFacade percpModelFacade = new PercpModelFacade();
+        percpModelFacade.runLinkGeneration("","" , true, true);
+        
         // Bypassing for Testing
 //        XMLParser xMLParser = new XMLParser();
 //
