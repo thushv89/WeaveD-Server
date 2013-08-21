@@ -5,7 +5,11 @@
 package com.weaved.perception.model.main;
 
 import com.ikasl.core.IKASLMain;
+import com.ikasl.objects.CrossFeatureData;
 import com.ikasl.objects.IKASLParams;
+import com.ikasl.objects.TemporalLinkData;
+import com.vhlinker.commands.VHLinkerCommand;
+import com.vhlinker.main.VHLinkerFacade;
 import com.weaved.config.loaders.IKASLConfigLoader;
 import com.weaved.config.loaders.ImportantPercpConfigLoader;
 import com.weaved.config.loaders.LinkGeneratorConfigLoader;
@@ -17,7 +21,10 @@ import com.weaved.config.models.PercpModelConfigModel;
 import com.weaved.config.models.elememts.IKASLConfigModelElement;
 import com.weaved.config.models.elememts.ImportantPercpConfigModelElement;
 import com.weaved.utils.Tree;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  *
@@ -29,6 +36,10 @@ public class PercpModelFacade {
     private ArrayList<IKASLConfigModelElement> ikaslParamList;
     private ArrayList<String> cfLinks;
     private ArrayList<IKASLMain> ikaslMainList;
+    private VHLinkerFacade vHLinkerFacade;
+    private VHLinkerCommand vHLinkerCommand;
+    private CrossFeatureData crossFeatureData;
+    private TemporalLinkData temporalLinkData;
 
     public PercpModelFacade() {
         ikaslMainList = new ArrayList<IKASLMain>();
@@ -140,6 +151,27 @@ public class PercpModelFacade {
     public void fusePerceptions() {
     }
 
-    public void runLinkGeneration() {
+    public void runLinkGeneration(String ikaslStack1Location, String ikaslStack2Location, boolean temporalLinksIsSet, boolean crossFLinksIsSet) {
+
+        Properties prop = new Properties();
+
+        try {
+            //set the properties value
+            prop.setProperty("sourceFolder1", ikaslStack1Location);
+            prop.setProperty("sourceFolder2", ikaslStack2Location);
+
+            //save properties to project root folder
+            prop.store(new FileOutputStream("config.properties"), null);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        vHLinkerFacade = new VHLinkerFacade();
+        vHLinkerCommand = vHLinkerFacade.generateVHLinkerCommand("config.properties", temporalLinksIsSet, crossFLinksIsSet);
+        vHLinkerFacade.runLinkersWithCommand(vHLinkerCommand);
+        crossFeatureData = vHLinkerFacade.getCrossLinkObject();
+        temporalLinkData = vHLinkerFacade.getTemporalLinkObject();
+
     }
 }
