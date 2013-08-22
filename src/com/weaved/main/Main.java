@@ -31,17 +31,20 @@ public class Main {
     public static void main(String[] args) {
 
         PercpModelFacade percpModelFacade = new PercpModelFacade();
-        //percpModelFacade.runLinkGeneration("","" , true, true);
+        
+        //Parsing inputs for color existence
         NumericalDataParser parser = new NumericalDataParser();
         parser.parseInput("input1_img.txt");
         ArrayList<double[]> imgIWeights = parser.getiWeights();
         ArrayList<String> imgINames = parser.getiNames();
         
+        //Parsing inputs for color proportion
         NumericalDataParser parser2 = new NumericalDataParser();
         parser2.parseInput("input1_txt.txt");
         ArrayList<double[]> txtIWeights = parser2.getiWeights();
         ArrayList<String> txtINames = parser2.getiNames();
         
+        //IKASL Parameters for color existence
         IKASLConstants.MIN_BOUND = 0;
         IKASLConstants.MAX_BOUND = 1;
         IKASLParams imgParams = new IKASLParams();
@@ -54,10 +57,8 @@ public class Main {
         imgParams.setAggregationType(0);
         imgParams.setHitThreshold(0);
         imgParams.setLearningCycleCount(1);
-        percpModelFacade.runIKASLTest("L0F1", imgParams, imgIWeights, imgINames);
-        
-        IKASLConstants.MIN_BOUND = 0;
-        IKASLConstants.MAX_BOUND = 100;
+           
+        //IKASL Parameters for color proportion
         IKASLParams txtParams = new IKASLParams();
         txtParams.setDimensions(IKASLConstants.DIMENSIONS);
         txtParams.setSpreadFactor(0.45);
@@ -69,9 +70,22 @@ public class Main {
         txtParams.setAggregationType(0);
         txtParams.setHitThreshold(0);
         
-        percpModelFacade.runIKASLTest("L0F2", txtParams, txtIWeights, txtINames);
+        ArrayList<IKASLParams> paramList = new ArrayList<IKASLParams>();
+        paramList.add(imgParams);
+        paramList.add(txtParams);
         
+        ArrayList<String> idList = new ArrayList<String>();
+        idList.add("L0F1");
+        idList.add("L0F2");
+        
+        percpModelFacade.createIKASLComponents(2, paramList, idList);
+        percpModelFacade.runIKASLTest("L0F1", imgParams, imgIWeights, imgINames,0,1);
+        percpModelFacade.runIKASLTest("L0F2", txtParams, txtIWeights, txtINames,0,100);
+        
+        //create only cross feature links, no temporal links
         percpModelFacade.runLinkGeneration("L0F1", "L0F2", false, true);
+        
+        //get the string list for horizontal links related to query
         ArrayList<String>  test = percpModelFacade.getHorizontalLinksForQuery(QueryObjectType.IMAGE, new double[]{1,0,1,1,1,0,0,0,0,0,0,0,0,0,0});
         
         System.out.println("-------------------------- Link Gen finished -----------------------------");

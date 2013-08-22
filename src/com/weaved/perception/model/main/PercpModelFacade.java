@@ -10,6 +10,7 @@ import com.ikasl.objects.IKASLParams;
 import com.ikasl.objects.TemporalLinkData;
 import com.ikasl.objects.cross.GNodeHitValueObject;
 import com.ikasl.objects.cross.GNodeHitValueObjectList;
+import com.ikasl.utils.IKASLConstants;
 import com.vhlinker.commands.VHLinkerCommand;
 import com.vhlinker.main.VHLinkerFacade;
 import com.vhlinker.util.EntityIDGenerator;
@@ -46,6 +47,15 @@ public class PercpModelFacade {
         ikaslMainList = new ArrayList<IKASLMain>();
     }
 
+    //===== This Method is to create IKASL params without going through
+    //XML files. Will probably be deleted later
+    public void createIKASLComponents(int count,ArrayList<IKASLParams> params, ArrayList<String> ids){
+        for(int i=0;i<count;i++){
+            IKASLMain ikasl = new IKASLMain(params.get(i), ids.get(i));
+            ikaslMainList.add(ikasl);
+        }
+    }
+            
     private IKASLParams getIKASLParamsFromModelElement(IKASLConfigModelElement element) {
         IKASLParams params = new IKASLParams();
         params.setSpreadFactor(element.getSpreadFactor());
@@ -139,6 +149,8 @@ public class PercpModelFacade {
 
     }
 
+    //don't wait till calling this method to create IKASLMains
+    //better to create at the setup as doing with creatIKASLComponetns Method
     public void runIKASL(Tree<String> percpTree, ArrayList<IKASLConfigModelElement> ikaslParamList) {
         if (percpTree.getSize() == ikaslParamList.size()) {
             for (int i = 0; i < percpTree.getSize(); i++) {
@@ -149,13 +161,22 @@ public class PercpModelFacade {
         }
     }
 
-    public void runIKASLTest(String id, IKASLParams params, ArrayList<double[]> iWeights, ArrayList<String> iNames){
+    public void runIKASLTest(String id, IKASLParams params, ArrayList<double[]> iWeights, ArrayList<String> iNames,
+            int min, int max){
         
-        IKASLMain ikasl = new IKASLMain(params, id);
-        ikasl.runIKASLForCycle(ikasl.retrieveLastLayer("lastGLayer.ser"), iWeights, iNames);
-        ikaslMainList.add(ikasl);
-        ikasl.writeLearnCycleXML(id);
-        System.out.println("----------------------- IKASL test results:"+ikasl.getTesterTestResults().size()+" -------------------------------");
+        IKASLConstants.MIN_BOUND = min;
+        IKASLConstants.MAX_BOUND = max;
+        IKASLMain currIKASL = null;
+        for(IKASLMain ikasl : ikaslMainList){
+            if(ikasl.getMyID().equalsIgnoreCase(id)){
+                currIKASL = ikasl;
+                currIKASL.runIKASLForCycle(currIKASL.retrieveLastLayer(), iWeights, iNames);        
+                currIKASL.writeLearnCycleXML(id);
+                System.out.println("----------------------- IKASL test results:"+currIKASL.getTesterTestResults().size()+" -------------------------------");
+                break;
+            }
+        }
+        
         
     }
     
@@ -202,6 +223,7 @@ public class PercpModelFacade {
     public ArrayList<String> getHorizontalLinksForQuery(QueryObjectType type, double[] query){
         String winnerID = this.findGNodeFromIKASLForQuery(type, query);
         System.out.println("--------------- Winner ID : "+winnerID+" -----------------------");
+        
         VHLinkerFacade vhLinkerFacade = vhLinkerList.get(0);
         
         CrossFeatureData crossFeatureData = vhLinkerFacade.getCrossLinkObject();
@@ -211,12 +233,14 @@ public class PercpModelFacade {
         ArrayList<ArrayList<String>> dataVals = new ArrayList<ArrayList<String>>();
         
         for(GNodeHitValueObject obj : gnHVList.get(gnHVList.size()-1).getgNodeHitValueObjects()){
-            if(EntityIDGenerator.generateEntityIDString(obj.getRow()).equals(winnerID)){
+            if(EntityIDGenerator.generateEntityIDString(obj.getRow()).equalsIgnoreCase(winnerID)){
                 dataVals.add(obj.getDataValues());
             }
         }
         
-        ArrayList<String> maxLengthStr = null;
+        System.out.println("Number of lists of string lists belonging to winner: "+dataVals.size());
+        
+        ArrayList<String> maxLengthStr = dataVals.get(0);
         ArrayList<String> prevStr = dataVals.get(0);
         for(ArrayList<String> str : dataVals){
             if(str.size()>=prevStr.size()){
