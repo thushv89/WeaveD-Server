@@ -45,10 +45,8 @@ public class Main {
         ArrayList<String> txtINames = parser2.getiNames();
         
         //IKASL Parameters for color existence
-        IKASLConstants.MIN_BOUND = 0;
-        IKASLConstants.MAX_BOUND = 1;
         IKASLParams imgParams = new IKASLParams();
-        imgParams.setDimensions(IKASLConstants.DIMENSIONS);
+        imgParams.setDimensions(27);
         imgParams.setSpreadFactor(0.45);
         imgParams.setMaxIterations(200);
         imgParams.setMaxNeighborhoodRadius(2);
@@ -60,7 +58,7 @@ public class Main {
            
         //IKASL Parameters for color proportion
         IKASLParams txtParams = new IKASLParams();
-        txtParams.setDimensions(IKASLConstants.DIMENSIONS);
+        txtParams.setDimensions(7);
         txtParams.setSpreadFactor(0.45);
         txtParams.setMaxIterations(200);
         txtParams.setMaxNeighborhoodRadius(2);
@@ -79,14 +77,14 @@ public class Main {
         idList.add("L0F2");
         
         percpModelFacade.createIKASLComponents(2, paramList, idList);
-        percpModelFacade.runIKASLTest("L0F1", imgParams, imgIWeights, imgINames,0,1);
-        percpModelFacade.runIKASLTest("L0F2", txtParams, txtIWeights, txtINames,0,100);
+        percpModelFacade.runIKASLTest("L0F1", imgParams, imgIWeights, imgINames,0,1,27);
+        percpModelFacade.runIKASLTest("L0F2", txtParams, txtIWeights, txtINames,0,1,7);
         
         //create only cross feature links, no temporal links
         percpModelFacade.runLinkGeneration("L0F1", "L0F2", false, true);
         
         //get the string list for horizontal links related to query
-        ArrayList<String>  test = percpModelFacade.getHorizontalLinksForQuery(QueryObjectType.IMAGE, new double[]{1,0,1,1,1,0,0,0,0,0,0,0,0,0,0});
+        ArrayList<String>  test = percpModelFacade.getHorizontalLinksForQuery(QueryObjectType.IMAGE, new double[]{1,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
         
         System.out.println("-------------------------- Link Gen finished -----------------------------");
         System.out.println(test.size());

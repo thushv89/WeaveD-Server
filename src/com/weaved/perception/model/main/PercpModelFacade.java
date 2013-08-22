@@ -162,10 +162,12 @@ public class PercpModelFacade {
     }
 
     public void runIKASLTest(String id, IKASLParams params, ArrayList<double[]> iWeights, ArrayList<String> iNames,
-            int min, int max){
+            int min, int max, int dims){
         
         IKASLConstants.MIN_BOUND = min;
         IKASLConstants.MAX_BOUND = max;
+        IKASLConstants.DIMENSIONS = dims;
+        
         IKASLMain currIKASL = null;
         for(IKASLMain ikasl : ikaslMainList){
             if(ikasl.getMyID().equalsIgnoreCase(id)){
